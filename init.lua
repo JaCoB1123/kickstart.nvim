@@ -836,6 +836,29 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      { "fredrikaverpil/neotest-golang", version = "*" }, -- Installation
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-golang")({ runner = "gotestsum" }), -- Registration
+        },
+      })
+    end,
+    keys = {
+      { "<leader>td", function() require("neotest").run.run({ suite = false }) end, desc = "Debug nearest test", },
+      { "<leader>ta", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run tests in file", },
+      { "<leader>to", function() require("neotest").output.open() end, desc = "Show test output", },
+      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Show tests summary", },
+    },
+  }
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
