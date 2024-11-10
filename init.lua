@@ -52,6 +52,19 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+-- use osc52 when copying but not pasting, since wezterm does not support reading the osc52 clipboard (see https://github.com/wez/wezterm/discussions/5231)
+vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+        ["+"] = require("vim.ui.clipboard.osc52").copy "+",
+        ["*"] = require("vim.ui.clipboard.osc52").copy "*",
+    },
+    paste = {
+        ["+"] = require("vim.ui.clipboard.osc52").paste "+",
+        ["*"] = require("vim.ui.clipboard.osc52").paste "*",
+    },
+}
+
 -- Enable break indent
 vim.opt.breakindent = true
 
