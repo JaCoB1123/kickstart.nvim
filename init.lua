@@ -41,6 +41,8 @@ vim.o.guifont = "FiraCode Nerd Font:h12"
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
+vim.g.grepprg = 'rg --vimgrep'
+vim.g.grepformat = '%f:%l:%c:%m'
 vim.opt.showmode = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
