@@ -213,21 +213,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    "supermaven-inc/supermaven-nvim",
-     config = function()
-       require("supermaven-nvim").setup({
-        
-  keymaps = {
-    accept_suggestion = "<Tab>",
-    clear_suggestion = "<C-x>",
-    accept_word = "<C-b>",
-  },
-
-      })
-     end,
-   },
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -664,11 +649,42 @@ require('lazy').setup({
       },
     },
   },
-
+  { 
+    'Saghen/blink.compat',
+    version = '*',
+    lazy = true,
+    opts = {
+        debug = true,
+    },
+  },
   { -- Autocompletion
     'Saghen/blink.cmp',
     version = '*',
+    dependencies = {
+      {
+        "supermaven-inc/supermaven-nvim",
+        opts = {
+          keymaps = {
+            accept_suggestion = nil, -- handled by blink-cmp
+            clear_suggestion = "<C-x>",
+            accept_word = "<C-b>",
+          },
+          disable_inline_completion = true,
+        }
+      },
+    },
     opts = {
+      sources = {
+        default = { 'lsp', 'path', 'supermaven', 'snippets', 'buffer' },
+        providers = {
+          supermaven = {
+            name = "supermaven",
+            module = "blink.compat.source",
+            async = true,
+            score_offset = 3,
+          },
+        },
+      },
       keymap = { 
         preset = 'default',
         -- Select the [n]ext item
@@ -718,11 +734,37 @@ require('lazy').setup({
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
-    },
-    -- Default list of enabled providers defined so that you can extend it
-    -- elsewhere in your config, without redefining it, due to `opts_extend`
-    sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      appearance = {
+					kind_icons = {
+            Text = " ",
+            Method = "󰆧 ",
+            Function = "󰊕 ",
+            Constructor = " ",
+            Field = "󰇽 ",
+            Variable = "󰂡 ",
+            Class = "󰠱 ",
+            Interface = " ",
+            Module = " ",
+            Property = "󰜢 ",
+            Unit = " ",
+            Value = "󰎠 ",
+            Enum = "",
+            Keyword = "󰌋 ",
+            Snippet = " ",
+            Color = "󰏘 ",
+            File = "󰈙 ",
+            Reference = " ",
+            Folder = "󰉋 ",
+            EnumMember = " ",
+            Constant = "󰏿 ",
+            Struct = " ",
+            Event = " ",
+            Operator = "󰆕 ",
+            TypeParameter = "󰅲 ",
+            supermaven = " ",
+            Supermaven = " ",
+          },
+      },
     },
   },
 
