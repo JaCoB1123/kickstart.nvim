@@ -678,21 +678,81 @@ require('lazy').setup({
   },
   { -- Autocompletion
     'Saghen/blink.cmp',
-    version = '*',
+    build = 'nix run .#build-plugin',
+    --version = '*',
     dependencies = {
       {
         "supermaven-inc/supermaven-nvim",
         opts = {
-          keymaps = {
-            accept_suggestion = nil, -- handled by blink-cmp
-            clear_suggestion = "<C-x>",
-            accept_word = "<C-b>",
-          },
           disable_inline_completion = true,
         }
       },
+      {
+        'echasnovski/mini.icons',
+        version = '*',
+        lazy = true,
+        opts = {
+          lsp = {
+            copilot = { glyph = '' },
+            supermaven = { glyph = '' },
+          },
+        }
+      },
     },
+    config = function(_, opts)
+      -- check if we need to override symbol kinds
+      for _, provider in pairs(opts.sources.providers or {}) do
+        ---@cast provider blink.cmp.SourceProviderConfig|{kind?:string}
+        if provider.kind then
+          local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+          local kind_idx = #CompletionItemKind + 1
+
+          CompletionItemKind[kind_idx] = provider.kind
+          ---@diagnostic disable-next-line: no-unknown
+          CompletionItemKind[provider.kind] = kind_idx
+
+          ---@type fun(ctx: blink.cmp.Context, items: blink.cmp.CompletionItem[]): blink.cmp.CompletionItem[]
+          local transform_items = provider.transform_items
+          ---@param ctx blink.cmp.Context
+          ---@param items blink.cmp.CompletionItem[]
+          provider.transform_items = function(ctx, items)
+            items = transform_items and transform_items(ctx, items) or items
+            for _, item in ipairs(items) do
+              item.kind = kind_idx or item.kind
+            end
+            return items
+          end
+
+          -- Unset custom prop to pass blink.cmp validation
+          provider.kind = nil
+        end
+      end
+
+      require("blink.cmp").setup(opts)
+    end,
     opts = {
+      completion = {
+          menu = {
+            draw = {
+              components = {
+              kind_icon = {
+                ellipsis = false,
+                text = function(ctx)
+                  local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
+                  return kind_icon
+                end,
+                -- Optionally, you may also use the highlights from mini.icons
+                highlight = function(ctx)
+                  local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
+                  return hl
+                end,
+              },
+            },
+            columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, },
+            treesitter = { "lsp" },
+          },
+        },
+      },
       sources = {
         default = { 'lsp', 'path', 'supermaven', 'snippets', 'buffer' },
         providers = {
@@ -701,15 +761,19 @@ require('lazy').setup({
             module = "blink.compat.source",
             async = true,
             score_offset = 3,
+            kind = "supermaven",
           },
         },
       },
       keymap = { 
-        preset = 'default',
+        preset = 'none',
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         -- Select the [n]ext item
         ['<C-n>'] = { 'select_next', 'fallback' },
         -- Select the [p]revious item
         ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<Up>'] = { 'select_prev', 'fallback' },
+['<Down>'] = { 'select_next', 'fallback' },
 
           -- Scroll the documentation window [b]ack / [f]orward
           --['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -752,37 +816,6 @@ require('lazy').setup({
 
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
-      },
-      appearance = {
-					kind_icons = {
-            Text = " ",
-            Method = "󰆧 ",
-            Function = "󰊕 ",
-            Constructor = " ",
-            Field = "󰇽 ",
-            Variable = "󰂡 ",
-            Class = "󰠱 ",
-            Interface = " ",
-            Module = " ",
-            Property = "󰜢 ",
-            Unit = " ",
-            Value = "󰎠 ",
-            Enum = "",
-            Keyword = "󰌋 ",
-            Snippet = " ",
-            Color = "󰏘 ",
-            File = "󰈙 ",
-            Reference = " ",
-            Folder = "󰉋 ",
-            EnumMember = " ",
-            Constant = "󰏿 ",
-            Struct = " ",
-            Event = " ",
-            Operator = "󰆕 ",
-            TypeParameter = "󰅲 ",
-            supermaven = " ",
-            Supermaven = " ",
-          },
       },
     },
   },
