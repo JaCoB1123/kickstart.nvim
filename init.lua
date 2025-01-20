@@ -57,7 +57,6 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
--- use osc52 when copying but not pasting, since wezterm does not support reading the osc52 clipboard (see https://github.com/wez/wezterm/discussions/5231)
 vim.g.clipboard = {
     name = "OSC 52",
     copy = {
@@ -376,15 +375,8 @@ require('lazy').setup({
         local cmd = ("foot nvim --server localhost:%s --remote-ui"):format(
           port
         )
-        --if vim.env.TERM == "xterm-kitty" then
-        -- cmd = ("kitty -e nvim --server localhost:%s --remote-ui"):format(port)
-        --end
         vim.fn.jobstart(cmd, {
           detach = true,
-        --  on_exit = function(job_id, exit_code, event_type)
-        --    -- This function will be called when the job exits
-        --    print("Client", job_id, "exited with code", exit_code, "Event type:", event_type)
-        --  end,
         })
       end,
     },
