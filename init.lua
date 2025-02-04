@@ -618,6 +618,14 @@ require('lazy').setup({
     end,
   },
 
+  {
+    "seblj/roslyn.nvim",
+    ft = "cs",
+    opts = {
+      exe = 'Microsoft.CodeAnalysis.LanguageServer',
+    }
+  },
+
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
