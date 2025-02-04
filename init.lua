@@ -36,7 +36,7 @@ Kickstart Guide:
 --]]
 
 -- Neovide
-vim.o.guifont = "FiraCode Nerd Font:h12"
+vim.o.guifont = 'FiraCode Nerd Font:h12'
 
 -- NOTE: NIXCATS USERS:
 -- NOTE: there are also notes added as a tutorial of how to use the nixCats lazy wrapper.
@@ -61,7 +61,7 @@ vim.opt.showmode = false
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 -- NOTE: nixCats: we asked nix if we have it instead of setting it here.
 -- because nix is more likely to know if we have a nerd font or not.
-vim.g.have_nerd_font = nixCats("have_nerd_font")
+vim.g.have_nerd_font = nixCats 'have_nerd_font'
 
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -77,19 +77,19 @@ vim.schedule(function()
 end)
 
 vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
-        ["+"] = require("vim.ui.clipboard.osc52").copy "+",
-        ["*"] = require("vim.ui.clipboard.osc52").copy "*",
-    },
-    paste = {
-        ["+"] = require("vim.ui.clipboard.osc52").paste "+",
-        ["*"] = require("vim.ui.clipboard.osc52").paste "*",
-    },
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+  },
 }
 if vim.env.TMUX ~= nil then
-  local copy = {'tmux', 'load-buffer', '-w', '-'}
-  local paste = {'bash', '-c', 'tmux refresh-client -l && sleep 0.05 && tmux save-buffer -'}
+  local copy = { 'tmux', 'load-buffer', '-w', '-' }
+  local paste = { 'bash', '-c', 'tmux refresh-client -l && sleep 0.05 && tmux save-buffer -' }
   vim.g.clipboard = {
     name = 'tmux',
     copy = {
@@ -208,10 +208,10 @@ vim.opt.rtp:prepend(lazypath)
 
 -- NOTE: nixCats: You might want to move the lazy-lock.json file
 local function getlockfilepath()
-  if require('nixCatsUtils').isNixCats and type(nixCats.settings.unwrappedCfgPath) == "string" then
-    return nixCats.settings.unwrappedCfgPath .. "/lazy-lock.json"
+  if require('nixCatsUtils').isNixCats and type(nixCats.settings.unwrappedCfgPath) == 'string' then
+    return nixCats.settings.unwrappedCfgPath .. '/lazy-lock.json'
   else
-    return vim.fn.stdpath("config") .. "/lazy-lock.json"
+    return vim.fn.stdpath 'config' .. '/lazy-lock.json'
   end
 end
 local lazyOptions = {
@@ -250,13 +250,12 @@ local lazyOptions = {
 -- NOTE: Here is where you install your plugins.
 -- NOTE: nixCats: this the lazy wrapper. Use it like require('lazy').setup() but with an extra
 -- argument, the path to lazy.nvim as downloaded by nix, or nil, before the normal arguments.
-require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "lazy.nvim" }),
-{
+require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 'lazy.nvim' }, {
   { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: nixCats: nix downloads it with a different file name.
   -- tell lazy about that.
-  { 'numToStr/Comment.nvim', name = "comment.nvim", opts = {} },
+  { 'numToStr/Comment.nvim', name = 'comment.nvim', opts = {} },
 
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -324,7 +323,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
         -- This is only run then, not every time Neovim starts up.
         -- NOTE: nixCats: use lazyAdd to only run build steps if nix wasnt involved.
         -- because nix already did this.
-        build = require('nixCatsUtils').lazyAdd('make'),
+        build = require('nixCatsUtils').lazyAdd 'make',
 
         -- `cond` is a condition used to determine whether this plugin should be
         -- installed and loaded.
@@ -415,37 +414,49 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
     end,
   },
   {
-    "ThePrimeagen/refactoring.nvim",
+    'ThePrimeagen/refactoring.nvim',
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
     },
     lazy = false,
     config = function()
-      require("refactoring").setup()
-      vim.keymap.set("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end)
-      vim.keymap.set("x", "<leader>rf", function() require('refactoring').refactor('Extract Function To File') end)
-      vim.keymap.set("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end)
-      vim.keymap.set("n", "<leader>rI", function() require('refactoring').refactor('Inline Function') end)
-      vim.keymap.set({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end)
+      require('refactoring').setup()
+      vim.keymap.set('x', '<leader>re', function()
+        require('refactoring').refactor 'Extract Function'
+      end)
+      vim.keymap.set('x', '<leader>rf', function()
+        require('refactoring').refactor 'Extract Function To File'
+      end)
+      vim.keymap.set('x', '<leader>rv', function()
+        require('refactoring').refactor 'Extract Variable'
+      end)
+      vim.keymap.set('n', '<leader>rI', function()
+        require('refactoring').refactor 'Inline Function'
+      end)
+      vim.keymap.set({ 'n', 'x' }, '<leader>ri', function()
+        require('refactoring').refactor 'Inline Variable'
+      end)
 
-      vim.keymap.set("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end)
-      vim.keymap.set("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end)
+      vim.keymap.set('n', '<leader>rb', function()
+        require('refactoring').refactor 'Extract Block'
+      end)
+      vim.keymap.set('n', '<leader>rbf', function()
+        require('refactoring').refactor 'Extract Block To File'
+      end)
     end,
   },
   {
-    "amitds1997/remote-nvim.nvim",
-    version = "*", -- Pin to GitHub releases
+    'amitds1997/remote-nvim.nvim',
+    version = '*', -- Pin to GitHub releases
     dependencies = {
-      "nvim-lua/plenary.nvim", -- For standard functions
-      "MunifTanjim/nui.nvim", -- To build the plugin UI
-      "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
+      'nvim-lua/plenary.nvim', -- For standard functions
+      'MunifTanjim/nui.nvim', -- To build the plugin UI
+      'nvim-telescope/telescope.nvim', -- For picking b/w different remote methods
     },
     opts = {
       client_callback = function(port, workspace_config)
-        local cmd = ("foot nvim --server localhost:%s --remote-ui"):format(
-          port
-        )
+        local cmd = ('foot nvim --server localhost:%s --remote-ui'):format(port)
         vim.fn.jobstart(cmd, {
           detach = true,
         })
@@ -500,13 +511,15 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       -- TODO: merge lazydevs
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/lazydev.nvim', ft = "lua",
+      {
+        'folke/lazydev.nvim',
+        ft = 'lua',
         opts = {
           library = {
             -- adds type hints for nixCats global
-            { path = (nixCats.nixCatsPath or "") .. '/lua', words = { "nixCats" } },
+            { path = (nixCats.nixCatsPath or '') .. '/lua', words = { 'nixCats' } },
           },
-        }
+        },
       },
       -- kickstart.nvim was still on neodev. lazydev is the new version of neodev
     },
@@ -601,8 +614,8 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
---        TODO: check if better
---        if client and client.server_capabilities.documentHighlightProvider then
+            --        TODO: check if better
+            --        if client and client.server_capabilities.documentHighlightProvider then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -630,10 +643,10 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
           --
           -- This may be unwanted, since they displace some of your code
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
---        TODO:  if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            --        TODO:  if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
--- TODO:           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              -- TODO:           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
             end, '[T]oggle Inlay [H]ints')
           end
         end,
@@ -654,7 +667,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
--- TODO:     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      -- TODO:     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -694,7 +707,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               diagnostics = {
-                globals = { "nixCats" },
+                globals = { 'nixCats' },
                 disable = { 'missing-fields' },
               },
             },
@@ -713,14 +726,14 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       -- You could MAKE it work, using lspsAndRuntimeDeps and sharedLibraries in nixCats
       -- but don't... its not worth it. Just add the lsp to lspsAndRuntimeDeps.
       if require('nixCatsUtils').isNixCats then
-        for server_name,_ in pairs(servers) do
-          require('lspconfig')[server_name].setup({
+        for server_name, _ in pairs(servers) do
+          require('lspconfig')[server_name].setup {
             capabilities = capabilities,
             settings = servers[server_name],
             filetypes = (servers[server_name] or {}).filetypes,
             cmd = (servers[server_name] or {}).cmd,
             root_pattern = (servers[server_name] or {}).root_pattern,
-          })
+          }
         end
       else
         -- NOTE: nixCats: and if no nix, do it the normal way
@@ -758,24 +771,24 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
   },
 
   {
-    "seblj/roslyn.nvim",
-    ft = "cs",
+    'seblj/roslyn.nvim',
+    ft = 'cs',
     opts = {
       exe = 'Microsoft.CodeAnalysis.LanguageServer',
-    }
+    },
   },
 
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
- -- TODO instead of event&cmd?   lazy = false,
+    -- TODO instead of event&cmd?   lazy = false,
     keys = {
       {
         '<leader>f',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
--- TODO?          require('conform').format { async = true, lsp_fallback = true }
+          -- TODO?          require('conform').format { async = true, lsp_fallback = true }
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -797,7 +810,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
         return {
           timeout_ms = 500,
           lsp_format = lsp_format_opt,
- -- TODO?         lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+          -- TODO?         lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
       formatters_by_ft = {
@@ -810,12 +823,12 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       },
     },
   },
-  { 
+  {
     'Saghen/blink.compat',
     version = '*',
     lazy = true,
     opts = {
-        debug = true,
+      debug = true,
     },
   },
   { -- Autocompletion
@@ -825,10 +838,10 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       {
-        "supermaven-inc/supermaven-nvim",
+        'supermaven-inc/supermaven-nvim',
         opts = {
           disable_inline_completion = true,
-        }
+        },
       },
       {
         'echasnovski/mini.icons',
@@ -839,7 +852,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
             copilot = { glyph = '' },
             supermaven = { glyph = '' },
           },
-        }
+        },
       },
     },
     config = function(_, opts)
@@ -847,7 +860,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       for _, provider in pairs(opts.sources.providers or {}) do
         ---@cast provider blink.cmp.SourceProviderConfig|{kind?:string}
         if provider.kind then
-          local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+          local CompletionItemKind = require('blink.cmp.types').CompletionItemKind
           local kind_idx = #CompletionItemKind + 1
 
           CompletionItemKind[kind_idx] = provider.kind
@@ -864,16 +877,16 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
               item.kind = kind_idx or item.kind
             end
             return items
---      'L3MON4D3/LuaSnip',
- --     -- NOTE: nixCats: nix downloads it with a different file name.
- --     -- tell lazy about that.
- --     name = 'luasnip',
- --     build = require('nixCatsUtils').lazyAdd((function()
- --       -- Build Step is needed for regex support in snippets.
- --       -- This step is not supported in many windows environments.
- --       -- Remove the below condition to re-enable on windows.
- --       if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
- --         return
+            --      'L3MON4D3/LuaSnip',
+            --     -- NOTE: nixCats: nix downloads it with a different file name.
+            --     -- tell lazy about that.
+            --     name = 'luasnip',
+            --     build = require('nixCatsUtils').lazyAdd((function()
+            --       -- Build Step is needed for regex support in snippets.
+            --       -- This step is not supported in many windows environments.
+            --       -- Remove the below condition to re-enable on windows.
+            --       if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+            --         return
           end
 
           -- Unset custom prop to pass blink.cmp validation
@@ -881,13 +894,13 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
         end
       end
 
-      require("blink.cmp").setup(opts)
+      require('blink.cmp').setup(opts)
     end,
     opts = {
       completion = {
-          menu = {
-            draw = {
-              components = {
+        menu = {
+          draw = {
+            components = {
               kind_icon = {
                 ellipsis = false,
                 text = function(ctx)
@@ -901,12 +914,12 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
                 end,
               },
             },
-            columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, },
-            treesitter = { "lsp" },
+            columns = { { 'kind_icon', gap = 1 }, { 'label', 'label_description', gap = 1 } },
+            treesitter = { 'lsp' },
           },
---        return 'make install_jsregexp'
---      end)()),
---      dependencies = {
+          --        return 'make install_jsregexp'
+          --      end)()),
+          --      dependencies = {
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
@@ -922,34 +935,34 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
         default = { 'lsp', 'path', 'supermaven', 'snippets', 'buffer' },
         providers = {
           supermaven = {
-            name = "supermaven",
-            module = "blink.compat.source",
+            name = 'supermaven',
+            module = 'blink.compat.source',
             async = true,
             score_offset = 3,
-            kind = "supermaven",
+            kind = 'supermaven',
           },
---    'saadparwaiz1/cmp_luasnip',
+          --    'saadparwaiz1/cmp_luasnip',
 
-      -- Adds other completion capabilities.
-      --  nvim-cmp does not ship with all sources by default. They are split
-      --  into multiple repos for maintenance purposes.
---    'hrsh7th/cmp-nvim-lsp',
---    'hrsh7th/cmp-path',
---  },
---  config = function()
-      -- See `:help cmp`
---    local cmp = require 'cmp'
---    local luasnip = require 'luasnip'
---    luasnip.config.setup {}
+          -- Adds other completion capabilities.
+          --  nvim-cmp does not ship with all sources by default. They are split
+          --  into multiple repos for maintenance purposes.
+          --    'hrsh7th/cmp-nvim-lsp',
+          --    'hrsh7th/cmp-path',
+          --  },
+          --  config = function()
+          -- See `:help cmp`
+          --    local cmp = require 'cmp'
+          --    local luasnip = require 'luasnip'
+          --    luasnip.config.setup {}
 
---    cmp.setup {
---      snippet = {
---        expand = function(args)
---          luasnip.lsp_expand(args.body)
---        end,
+          --    cmp.setup {
+          --      snippet = {
+          --        expand = function(args)
+          --          luasnip.lsp_expand(args.body)
+          --        end,
         },
       },
-      keymap = { 
+      keymap = {
         preset = 'none',
         ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         -- Select the [n]ext item
@@ -957,37 +970,37 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
         -- Select the [p]revious item
         ['<C-p>'] = { 'select_prev', 'fallback' },
         ['<Up>'] = { 'select_prev', 'fallback' },
-['<Down>'] = { 'select_next', 'fallback' },
+        ['<Down>'] = { 'select_next', 'fallback' },
 
-          -- Scroll the documentation window [b]ack / [f]orward
-          --['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          --['<C-f>'] = cmp.mapping.scroll_docs(4),
+        -- Scroll the documentation window [b]ack / [f]orward
+        --['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        --['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-          -- Accept ([y]es) the completion.
-          --  This will auto-import if your LSP supports it.
-          --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = { 'select_and_accept', 'fallback' },
+        -- Accept ([y]es) the completion.
+        --  This will auto-import if your LSP supports it.
+        --  This will expand snippets if the LSP sent a snippet.
+        ['<C-y>'] = { 'select_and_accept', 'fallback' },
 
-          -- If you prefer more traditional completion keymaps,
-          -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+        -- If you prefer more traditional completion keymaps,
+        -- you can uncomment the following lines
+        --['<CR>'] = cmp.mapping.confirm { select = true },
+        --['<Tab>'] = cmp.mapping.select_next_item(),
+        --['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
-          -- Manually trigger a completion from nvim-cmp.
-          --  Generally you don't need this, because nvim-cmp will display
-          --  completions whenever it has completion options available.
-          --['<C-Space>'] = cmp.mapping.complete {},
+        -- Manually trigger a completion from nvim-cmp.
+        --  Generally you don't need this, because nvim-cmp will display
+        --  completions whenever it has completion options available.
+        --['<C-Space>'] = cmp.mapping.complete {},
 
-          -- Think of <c-l> as moving to the right of your snippet expansion.
-          --  So if you have a snippet that's like:
-          --  function $name($args)
-          --    $body
-          --  end
-          --
-          -- <c-l> will move you to the right of each of the expansion locations.
-          -- <c-h> is similar, except moving you backwards.
-          --[['<C-l>'] = cmp.mapping(function()
+        -- Think of <c-l> as moving to the right of your snippet expansion.
+        --  So if you have a snippet that's like:
+        --  function $name($args)
+        --    $body
+        --  end
+        --
+        -- <c-l> will move you to the right of each of the expansion locations.
+        -- <c-h> is similar, except moving you backwards.
+        --[['<C-l>'] = cmp.mapping(function()
             if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             end
@@ -996,17 +1009,18 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
             if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
             end
-          end, { 'i', 's' }),]]--
+          end, { 'i', 's' }),]]
+        --
 
-          -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-          --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+        -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+        --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
     },
---      sources = {
---        { name = 'nvim_lsp' },
---        { name = 'luasnip' },
---        { name = 'path' },
- --     },
+    --      sources = {
+    --        { name = 'nvim_lsp' },
+    --        { name = 'luasnip' },
+    --        { name = 'path' },
+    --     },
   },
 
   { -- You can easily change to a different colorscheme.
@@ -1068,11 +1082,11 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = require('nixCatsUtils').lazyAdd(':TSUpdate'),
+    build = require('nixCatsUtils').lazyAdd ':TSUpdate',
     opts = {
       -- NOTE: nixCats: use lazyAdd to only set these 2 options if nix wasnt involved.
       -- because nix already ensured they were installed.
-      ensure_installed = require('nixCatsUtils').lazyAdd({ 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' }),
+      ensure_installed = require('nixCatsUtils').lazyAdd { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
       auto_install = require('nixCatsUtils').lazyAdd(true, false),
 
       highlight = {
@@ -1084,20 +1098,20 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
---    config = function(_, opts)
-      -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    --    config = function(_, opts)
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
-      -- Prefer git instead of curl in order to improve connectivity in some environments
---      require('nvim-treesitter.install').prefer_git = true
-      ---@diagnostic disable-next-line: missing-fields
---      require('nvim-treesitter.configs').setup(opts)
+    -- Prefer git instead of curl in order to improve connectivity in some environments
+    --      require('nvim-treesitter.install').prefer_git = true
+    ---@diagnostic disable-next-line: missing-fields
+    --      require('nvim-treesitter.configs').setup(opts)
 
-      -- There are additional nvim-treesitter modules that you can use to interact
-      -- with nvim-treesitter. You should go explore a few and see what interests you:
-      --
-      --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-      --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-      --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    -- There are additional nvim-treesitter modules that you can use to interact
+    -- with nvim-treesitter. You should go explore a few and see what interests you:
+    --
+    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
@@ -1106,37 +1120,61 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
   {
-    "nvim-neotest/neotest",
+    'nvim-neotest/neotest',
     dependencies = {
-      "nvim-neotest/nvim-nio",
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      { "fredrikaverpil/neotest-golang", version = "*" }, -- Installation
+      'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      { 'fredrikaverpil/neotest-golang', version = '*' }, -- Installation
     },
     config = function()
-      require("neotest").setup({
+      require('neotest').setup {
         adapters = {
-          require("neotest-golang")({ runner = "gotestsum" }), -- Registration
+          require 'neotest-golang' { runner = 'gotestsum' }, -- Registration
         },
-      })
+      }
     end,
     keys = {
-      { "<leader>td", function() require("neotest").run.run({ suite = false }) end, desc = "Debug nearest test", },
-      { "<leader>ta", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run tests in file", },
-      { "<leader>to", function() require("neotest").output.open() end, desc = "Show test output", },
-      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Show tests summary", },
+      {
+        '<leader>td',
+        function()
+          require('neotest').run.run { suite = false }
+        end,
+        desc = 'Debug nearest test',
+      },
+      {
+        '<leader>ta',
+        function()
+          require('neotest').run.run(vim.fn.expand '%')
+        end,
+        desc = 'Run tests in file',
+      },
+      {
+        '<leader>to',
+        function()
+          require('neotest').output.open()
+        end,
+        desc = 'Show test output',
+      },
+      {
+        '<leader>ts',
+        function()
+          require('neotest').summary.toggle()
+        end,
+        desc = 'Show tests summary',
+      },
     },
   },
   {
-    "rbong/vim-flog",
+    'rbong/vim-flog',
     lazy = true,
-    cmd = { "Flog", "Flogsplit", "Floggit" },
+    cmd = { 'Flog', 'Flogsplit', 'Floggit' },
     dependencies = {
-      "tpope/vim-fugitive",
+      'tpope/vim-fugitive',
     },
   },
-  { "sindrets/diffview.nvim", },
+  { 'sindrets/diffview.nvim' },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1161,7 +1199,8 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible({"allPlugins", "start", "
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+  --{ import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
