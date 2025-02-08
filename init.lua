@@ -1196,9 +1196,16 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
 
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
     build = require('nixCatsUtils').lazyAdd 'make',
-    lazy = false,
+    lazy = true,
+    cmd = {
+      "AvanteAsk",
+      "AvanteBuild",
+      "AvanteChat",
+      "AvanteEdit",
+      "AvanteToggle",
+      "AvanteSwitchProvider"
+    },
     version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
     opts = {
       -- add any opts here
