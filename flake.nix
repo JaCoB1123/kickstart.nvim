@@ -111,6 +111,8 @@
           gopls
           go_1_24
           gotestsum
+          golangci-lint
+          golangci-lint-langserver
         ];
         kickstart-debug = [
           delve
