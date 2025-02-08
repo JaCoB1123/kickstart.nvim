@@ -104,6 +104,24 @@ if vim.env.TMUX ~= nil then
   }
 end
 
+local stdout = vim.loop.new_pipe(false)
+local handle
+handle = vim.loop.spawn("rbw", {
+  args = {"get", "OpenAI Personal API Key"},
+  stdio = {nil, stdout, nil}
+}, function()
+  handle:close()
+end)
+
+vim.loop.read_start(stdout, function(err, data)
+  if err then return end
+  if data then
+    vim.schedule(function()
+      vim.env.OPENAI_API_KEY = data:gsub("%s+$", "")  -- Trim whitespace
+    end)
+  end
+end)
+
 -- Enable break indent
 vim.opt.breakindent = true
 
