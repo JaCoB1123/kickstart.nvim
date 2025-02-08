@@ -107,6 +107,11 @@
           nixd
           stylua
         ];
+        golang = [
+          gopls
+          go_1_24
+          gotestsum
+        ];
         kickstart-debug = [
           delve
         ];
@@ -141,13 +146,8 @@
           todo-comments-nvim
           mini-nvim
           nvim-treesitter.withAllGrammars
-          # This is for if you only want some of the grammars
-          # (nvim-treesitter.withPlugins (
-          #   plugins: with plugins; [
-          #     nix
-          #     lua
-          #   ]
-          # ))
+          avante-nvim
+          dressing-nvim
         ];
         kickstart-debug = [
           nvim-dap
@@ -194,8 +194,8 @@
       # this section is for environmentVariables that should be available
       # at RUN TIME for plugins. Will be available to path within neovim terminal
       environmentVariables = {
-        test = {
-          CATTESTVAR = "It worked!";
+        golang = {
+          CGO_ENABLED = 0;
         };
       };
 
@@ -203,9 +203,6 @@
       # If you dont, check this link out:
       # https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
       extraWrapperArgs = {
-        test = [
-          '' --set CATTESTVAR2 "It worked again!"''
-        ];
       };
 
       # lists of the functions you would have passed to
@@ -216,11 +213,9 @@
       # vim.g.python3_host_prog
       # or run from nvim terminal via :!<packagename>-python3
       extraPython3Packages = {
-        test = (_:[]);
       };
       # populates $LUA_PATH and $LUA_CPATH
       extraLuaPackages = {
-        test = [ (_:[]) ];
       };
     };
 
@@ -249,9 +244,9 @@
         # (and other information to pass to lua)
         categories = {
           general = true;
+          golang = true;
           gitPlugins = true;
           customPlugins = true;
-          test = true;
 
           kickstart-autopairs = true;
           kickstart-neo-tree = true;
