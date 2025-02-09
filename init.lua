@@ -852,7 +852,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   },
   { -- Autocompletion
     'Saghen/blink.cmp',
-    build = 'nix run .#build-plugin',
+    build = require('nixCatsUtils').lazyAdd 'nix run .#build-plugin',
     --version = '*',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
