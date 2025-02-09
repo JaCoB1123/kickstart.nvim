@@ -118,6 +118,7 @@ vim.loop.read_start(stdout, function(err, data)
   if data then
     vim.schedule(function()
       vim.env.OPENAI_API_KEY = data:gsub("%s+$", "")  -- Trim whitespace
+      require("lazy").load({ plugins = { "avante.nvim" } })
     end)
   end
 end)
