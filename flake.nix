@@ -139,7 +139,7 @@
           lazydev-nvim
           fidget-nvim
           conform-nvim
-          nvim-cmp
+          blink-cmp
           luasnip
           cmp_luasnip
           cmp-nvim-lsp
