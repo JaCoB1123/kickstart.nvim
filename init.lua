@@ -863,9 +863,6 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       -- Snippet Engine & its associated nvim-cmp source
       {
         'supermaven-inc/supermaven-nvim',
-        opts = {
-          disable_inline_completion = true,
-        },
       },
       {
         'echasnovski/mini.icons',
