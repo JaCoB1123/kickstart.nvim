@@ -857,15 +857,17 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       }
     end,
   },
+  {
+    'supermaven-inc/supermaven-nvim',
+    lazy = false,
+    opts = {},
+  },
   { -- Autocompletion
     'Saghen/blink.cmp',
     build = require('nixCatsUtils').lazyAdd 'nix run .#build-plugin',
     --version = '*',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
-      {
-        'supermaven-inc/supermaven-nvim',
-      },
       {
         'echasnovski/mini.icons',
         version = '*',
