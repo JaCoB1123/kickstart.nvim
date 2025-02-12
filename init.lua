@@ -676,17 +676,15 @@ require('lazy').setup({
         debug = true,
     },
   },
+  {
+    "supermaven-inc/supermaven-nvim",
+    opts = {}
+  },
   { -- Autocompletion
     'Saghen/blink.cmp',
     build = 'nix run .#build-plugin',
     --version = '*',
     dependencies = {
-      {
-        "supermaven-inc/supermaven-nvim",
-        opts = {
-          disable_inline_completion = true,
-        }
-      },
       {
         'echasnovski/mini.icons',
         version = '*',
@@ -754,16 +752,7 @@ require('lazy').setup({
         },
       },
       sources = {
-        default = { 'lsp', 'path', 'supermaven', 'snippets', 'buffer' },
-        providers = {
-          supermaven = {
-            name = "supermaven",
-            module = "blink.compat.source",
-            async = true,
-            score_offset = 3,
-            kind = "supermaven",
-          },
-        },
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
       },
       keymap = { 
         preset = 'none',
