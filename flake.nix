@@ -83,44 +83,47 @@
       # )
     ];
 
+    shellPackages = { pkgs, ... }: {
+        # lspsAndRuntimeDeps:
+        # this section is for dependencies that should be available
+        # at RUN TIME for plugins. Will be available to PATH within neovim terminal
+        # this includes LSPs
+        lspsAndRuntimeDeps = with pkgs; {
+          general = [
+            universal-ctags
+            ripgrep
+            fd
+            stdenv.cc.cc
+            nix-doc
+            lua-language-server
+            nixd
+            stylua
+          ];
+          golang = [
+            gopls
+            go_1_24
+            gotestsum
+            golangci-lint
+            golangci-lint-langserver
+          ];
+          kickstart-debug = [
+            delve
+          ];
+          kickstart-lint = [
+            markdownlint-cli
+          ];
+      };
+    };
+
     # see :help nixCats.flake.outputs.categories
     # and
     # :help nixCats.flake.outputs.categoryDefinitions.scheme
-    categoryDefinitions = { pkgs, settings, categories, extra, name, mkNvimPlugin, ... }@packageDef: {
-      # to define and use a new category, simply add a new list to a set here, 
-      # and later, you will include categoryname = true; in the set you
-      # provide when you build the package using this builder function.
-      # see :help nixCats.flake.outputs.packageDefinitions for info on that section.
-
-      # lspsAndRuntimeDeps:
-      # this section is for dependencies that should be available
-      # at RUN TIME for plugins. Will be available to PATH within neovim terminal
-      # this includes LSPs
-      lspsAndRuntimeDeps = with pkgs; {
-        general = [
-          universal-ctags
-          ripgrep
-          fd
-          stdenv.cc.cc
-          nix-doc
-          lua-language-server
-          nixd
-          stylua
-        ];
-        golang = [
-          gopls
-          go_1_24
-          gotestsum
-          golangci-lint
-          golangci-lint-langserver
-        ];
-        kickstart-debug = [
-          delve
-        ];
-        kickstart-lint = [
-          markdownlint-cli
-        ];
-      };
+    categoryDefinitions = { pkgs, settings, categories, extra, name, mkNvimPlugin, ... }@packageDef: 
+    let
+      shellPkgs = shellPackages { inherit pkgs; inherit settings; };
+    in 
+      {
+      lspsAndRuntimeDeps = shellPkgs.lspsAndRuntimeDeps;
 
       # This is for plugins that will load at startup without using packadd:
       startupPlugins = with pkgs.vimPlugins; {
@@ -292,6 +295,7 @@
     # The one used to build neovim is resolved inside the builder
     # and is passed to our categoryDefinitions and packageDefinitions
     pkgs = import nixpkgs { inherit system; };
+    shellPkgs = shellPackages {inherit pkgs;};
   in
   {
     # these outputs will be wrapped with ${system} by utils.eachSystem
@@ -305,7 +309,9 @@
     devShells = {
       default = pkgs.mkShell {
         name = defaultPackageName;
-        packages = [ defaultPackage ];
+        packages = [ defaultPackage ] 
+          ++ shellPkgs.lspsAndRuntimeDeps.general
+          ++ shellPkgs.lspsAndRuntimeDeps.golang;
         inputsFrom = [ ];
         shellHook = ''
         '';
