@@ -846,9 +846,14 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
     'Saghen/blink.compat',
     version = '*',
     lazy = true,
-    opts = {
-      debug = true,
-    },
+    opts = {},
+    config = function()
+      -- monkeypatch cmp.ConfirmBehavior for Avante
+      require("cmp").ConfirmBehavior = {
+        Insert = "insert",
+        Replace = "replace",
+      }
+    end,
   },
   { -- Autocompletion
     'Saghen/blink.cmp',
