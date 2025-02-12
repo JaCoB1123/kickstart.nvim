@@ -152,6 +152,7 @@
           avante-nvim
           dressing-nvim
           render-markdown-nvim
+          supermaven-nvim
         ];
         kickstart-debug = [
           nvim-dap
