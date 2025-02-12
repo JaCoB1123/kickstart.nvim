@@ -106,19 +106,21 @@ end
 
 local stdout = vim.loop.new_pipe(false)
 local handle
-handle = vim.loop.spawn("rbw", {
-  args = {"get", "OpenAI Personal API Key"},
-  stdio = {nil, stdout, nil}
+handle = vim.loop.spawn('rbw', {
+  args = { 'get', 'OpenAI Personal API Key' },
+  stdio = { nil, stdout, nil },
 }, function()
   handle:close()
 end)
 
 vim.loop.read_start(stdout, function(err, data)
-  if err then return end
+  if err then
+    return
+  end
   if data then
     vim.schedule(function()
-      vim.env.OPENAI_API_KEY = data:gsub("%s+$", "")  -- Trim whitespace
-      require("lazy").load({ plugins = { "avante.nvim" } })
+      vim.env.OPENAI_API_KEY = data:gsub('%s+$', '') -- Trim whitespace
+      require('lazy').load { plugins = { 'avante.nvim' } }
     end)
   end
 end)
@@ -849,9 +851,9 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
     opts = {},
     config = function()
       -- monkeypatch cmp.ConfirmBehavior for Avante
-      require("cmp").ConfirmBehavior = {
-        Insert = "insert",
-        Replace = "replace",
+      require('cmp').ConfirmBehavior = {
+        Insert = 'insert',
+        Replace = 'replace',
       }
     end,
   },
@@ -954,9 +956,16 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
         },
       },
       sources = {
-        default = { 'lsp', 'path', 
+        default = {
+          'lsp',
+          'path',
           --'supermaven', use ghost text instead
-          'avante_commands', 'avante_files', 'avante_mentions', 'snippets', 'buffer' },
+          'avante_commands',
+          'avante_files',
+          'avante_mentions',
+          'snippets',
+          'buffer',
+        },
         providers = {
           --[[supermaven = {
             name = 'supermaven',
@@ -964,28 +973,29 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
             async = true,
             score_offset = 3,
             kind = 'supermaven',
-          },]]--
+          },]]
+          --
           avante_commands = {
-            name = "avante_commands",
-            module = "blink.compat.source",
+            name = 'avante_commands',
+            module = 'blink.compat.source',
             score_offset = 90, -- show at a higher priority than lsp
             opts = {},
             kind = 'avante',
           },
           avante_files = {
-            name = "avante_files",
-            module = "blink.compat.source",
+            name = 'avante_files',
+            module = 'blink.compat.source',
             score_offset = 100, -- show at a higher priority than lsp
             opts = {},
             kind = 'avante',
           },
           avante_mentions = {
-            name = "avante_mentions",
-            module = "blink.compat.source",
+            name = 'avante_mentions',
+            module = 'blink.compat.source',
             score_offset = 1000, -- show at a higher priority than lsp
             opts = {},
             kind = 'avante',
-          }
+          },
           --    'saadparwaiz1/cmp_luasnip',
 
           -- Adds other completion capabilities.
@@ -1222,36 +1232,36 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
   { 'sindrets/diffview.nvim' },
 
   {
-    "yetone/avante.nvim",
+    'yetone/avante.nvim',
     build = require('nixCatsUtils').lazyAdd 'make',
     lazy = true,
     cmd = {
-      "AvanteAsk",
-      "AvanteBuild",
-      "AvanteChat",
-      "AvanteEdit",
-      "AvanteToggle",
-      "AvanteSwitchProvider"
+      'AvanteAsk',
+      'AvanteBuild',
+      'AvanteChat',
+      'AvanteEdit',
+      'AvanteToggle',
+      'AvanteSwitchProvider',
     },
     dependencies = {
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
+      'stevearc/dressing.nvim',
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
       {
         -- Make sure to set this up properly if you have lazy=true
         'MeanderingProgrammer/render-markdown.nvim',
         opts = {
-          file_types = { "markdown", "Avante" },
+          file_types = { 'markdown', 'Avante' },
         },
-        ft = { "markdown", "Avante" },
+        ft = { 'markdown', 'Avante' },
       },
     },
     version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
     opts = {
       -- add any opts here
       -- for example
-      auto_suggestions_provider = "openai",
-      provider = "openai",
+      auto_suggestions_provider = 'openai',
+      provider = 'openai',
       behaviour = {
         auto_suggestions = true,
         auto_set_highlight_group = true,
@@ -1262,8 +1272,8 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
         enable_token_counting = true,
       },
       openai = {
-        endpoint = "https://api.openai.com/v1",
-        model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+        endpoint = 'https://api.openai.com/v1',
+        model = 'gpt-4o', -- your desired model (or use gpt-4o, etc.)
         timeout = 30000, -- timeout in milliseconds
         temperature = 0, -- adjust if needed
         max_tokens = 4096,
