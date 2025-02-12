@@ -140,6 +140,7 @@
           fidget-nvim
           conform-nvim
           blink-cmp
+          blink-compat
           luasnip
           tokyonight-nvim
           todo-comments-nvim
@@ -147,6 +148,7 @@
           nvim-treesitter.withAllGrammars
           avante-nvim
           dressing-nvim
+          render-markdown-nvim
         ];
         kickstart-debug = [
           nvim-dap
