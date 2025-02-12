@@ -872,6 +872,7 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
           lsp = {
             copilot = { glyph = '' },
             supermaven = { glyph = '' },
+            avante = { glyph = '🧠' },
           },
         },
       },
@@ -953,32 +954,37 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
         },
       },
       sources = {
-        default = { 'lsp', 'path', 'supermaven', 'snippets', 'buffer' },
+        default = { 'lsp', 'path', 
+          --'supermaven', use ghost text instead
+          'avante_commands', 'avante_files', 'avante_mentions', 'snippets', 'buffer' },
         providers = {
-          supermaven = {
+          --[[supermaven = {
             name = 'supermaven',
             module = 'blink.compat.source',
             async = true,
             score_offset = 3,
             kind = 'supermaven',
-          },
+          },]]--
           avante_commands = {
             name = "avante_commands",
             module = "blink.compat.source",
             score_offset = 90, -- show at a higher priority than lsp
             opts = {},
+            kind = 'avante',
           },
           avante_files = {
             name = "avante_files",
             module = "blink.compat.source",
             score_offset = 100, -- show at a higher priority than lsp
             opts = {},
+            kind = 'avante',
           },
           avante_mentions = {
             name = "avante_mentions",
             module = "blink.compat.source",
             score_offset = 1000, -- show at a higher priority than lsp
             opts = {},
+            kind = 'avante',
           }
           --    'saadparwaiz1/cmp_luasnip',
 
@@ -1226,6 +1232,19 @@ require('nixCatsUtils.lazyCat').setup(nixCats.pawsible { 'allPlugins', 'start', 
       "AvanteEdit",
       "AvanteToggle",
       "AvanteSwitchProvider"
+    },
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
     },
     version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
     opts = {
