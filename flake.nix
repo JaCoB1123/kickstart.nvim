@@ -106,6 +106,14 @@
             golangci-lint
             golangci-lint-langserver
           ];
+          js = [
+            yarn
+            nodejs
+            typescript
+            nodePackages.typescript-language-server
+            nodePackages.eslint
+            nodePackages.prettier
+          ];
           kickstart-debug = [
             delve
           ];
@@ -312,7 +320,8 @@
         name = defaultPackageName;
         packages = [ defaultPackage ] 
           ++ shellPkgs.lspsAndRuntimeDeps.general
-          ++ shellPkgs.lspsAndRuntimeDeps.golang;
+          ++ shellPkgs.lspsAndRuntimeDeps.golang
+          ++ shellPkgs.lspsAndRuntimeDeps.js;
         inputsFrom = [ ];
         shellHook = ''
         '';
